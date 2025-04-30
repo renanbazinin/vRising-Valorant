@@ -1,0 +1,50 @@
+/* --- page setup --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #eef2ff;
+  font-family: 'Segoe UI', Tahoma, Sans-Serif;
+  color: #333;
+}
+
+/* --- card --- */
+.container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 300px;
+}
+
+/* --- header --- */
+h1 {
+  font-size: 1.4rem;
+  color: #3b49df;
+  margin-bottom: 1.5rem;
+}
+
+/* --- status row --- */
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e74c3c;
+  margin-right: 0.5rem;
+  transition: background 0.3s;
+}
+.indicator.online { background: #2ecc71; }
+
+/* --- players text --- */
+.players {
+  font-size: 1rem;
+}
