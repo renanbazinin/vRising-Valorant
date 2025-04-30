@@ -1,3 +1,17 @@
+/* public/style.css */
+/* --- dark mode variables --- */
+:root {
+  --bg: #121212;
+  --card-bg: #1e1e1e;
+  --text: #e0e0e0;
+  --accent: #bb86fc;
+  --accent-hover: #9a67ea;
+  --indicator-online: #03dac6;
+  --indicator-offline: #cf6679;
+  --button-bg: var(--accent);
+  --button-hover: var(--accent-hover);
+}
+
 /* --- page setup --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -5,25 +19,27 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #eef2ff;
+  background: var(--bg);
   font-family: 'Segoe UI', Tahoma, Sans-Serif;
-  color: #333;
+  color: var(--text);
 }
 
 /* --- card --- */
 .container {
-  background: #fff;
+  background: var(--card-bg);
+  color: var(--text);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
   text-align: center;
-  width: 300px;
+  width: 100%;
+  max-width: 350px;
 }
 
 /* --- header --- */
 h1 {
   font-size: 1.4rem;
-  color: #3b49df;
+  color: var(--accent);
   margin-bottom: 1.5rem;
 }
 
@@ -38,13 +54,93 @@ h1 {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #e74c3c;
+  background: var(--indicator-offline);
   margin-right: 0.5rem;
   transition: background 0.3s;
 }
-.indicator.online { background: #2ecc71; }
+.indicator.online { background: var(--indicator-online); }
 
 /* --- players text --- */
 .players {
   font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- lists --- */
+.list-container {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+.list-container h2 {
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.list-container ul {
+  list-style-position: inside;
+  margin-bottom: 1rem;
+}
+.list-container li {
+  padding: 0.2rem 0;
+}
+
+/* --- broadcast form --- */
+.broadcast-form {
+  text-align: left;
+  margin-top: 1.5rem;
+}
+#broadcast-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+#broadcast-message {
+  flex-grow: 1;
+  padding: 0.5rem;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: var(--text);
+}
+button {
+  background-color: var(--button-bg);
+  color: var(--text);
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+button:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(0);
+}
+#broadcast-status {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: #aaa;
+  min-height: 1.2em;
+}
+
+/* --- mobile responsiveness --- */
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+    max-width: 90%;
+  }
+  h1 {
+    font-size: 1.2rem;
+  }
+  .players {
+    font-size: 0.9rem;
+  }
+  .list-container h2 {
+    font-size: 1rem;
+  }
+  button {
+    padding: 0.4rem 0.8rem;
+  }
 }
