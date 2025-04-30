@@ -18,6 +18,25 @@
     <div class="players">
       Players online: <span id="playerCount">0</span>
     </div>
+
+    <div class="server-info">
+      <h2>Server Information</h2>
+      <div id="server-info-content">Loading...</div>
+    </div>
+    
+    <div class="uptime">
+      <h2>Server Uptime</h2>
+      <div id="uptime-content">Loading...</div>
+    </div>
+
+    <div class="broadcast-form">
+      <h2>Broadcast Message</h2>
+      <form id="broadcast-form">
+        <input type="text" id="broadcast-message" placeholder="Enter message to broadcast" required>
+        <button type="submit">Send</button>
+      </form>
+      <div id="broadcast-status"></div>
+    </div>
   </div>
 
   <script src="client.js"></script>

@@ -59,6 +59,48 @@ async function execCommand(cmd) {
   }
 }
 
+// Get server uptime
+async function getUptime() {
+  try {
+    const resp = await fetch(`${BASE_URL}/uptime`);
+    const data = await resp.json();
+    return data.uptime;
+  } catch (e) {
+    console.error('Error fetching uptime:', e);
+    return 'Unavailable';
+  }
+}
+
+// Get server info
+async function getServerInfo() {
+  try {
+    const resp = await fetch(`${BASE_URL}/serverinfo`);
+    const data = await resp.json();
+    return data.info;
+  } catch (e) {
+    console.error('Error fetching server info:', e);
+    return 'Unavailable';
+  }
+}
+
+// Broadcast message to server
+async function broadcastMessage(message) {
+  try {
+    const resp = await fetch(`${BASE_URL}/broadcast`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+    const data = await resp.json();
+    return data;
+  } catch (e) {
+    console.error('Error broadcasting message:', e);
+    throw e;
+  }
+}
+
 // Update UI with full player list
 async function showPlayerList() {
   // Check if player list container exists, if not create it
@@ -137,6 +179,28 @@ async function showClanList() {
   }
 }
 
+// Update server info UI
+async function updateServerInfo() {
+  const serverInfoContent = document.getElementById('server-info-content');
+  try {
+    const info = await getServerInfo();
+    serverInfoContent.textContent = info;
+  } catch (e) {
+    serverInfoContent.textContent = 'Failed to load server information';
+  }
+}
+
+// Update uptime UI
+async function updateUptime() {
+  const uptimeContent = document.getElementById('uptime-content');
+  try {
+    const uptime = await getUptime();
+    uptimeContent.textContent = uptime;
+  } catch (e) {
+    uptimeContent.textContent = 'Failed to load uptime';
+  }
+}
+
 // Initialize and set up refresh intervals
 function init() {
   // Add CSS for the new elements
@@ -161,18 +225,71 @@ function init() {
     .container {
       width: 400px;
     }
+    .server-info, .uptime, .broadcast-form {
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+    #broadcast-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    #broadcast-message {
+      flex-grow: 1;
+      padding: 0.5rem;
+    }
+    #broadcast-status {
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    button {
+      background-color: #3b49df;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2a3bcc;
+    }
   `;
   document.head.appendChild(style);
+
+  // Set up broadcast form handler
+  const broadcastForm = document.getElementById('broadcast-form');
+  const broadcastStatus = document.getElementById('broadcast-status');
+  
+  broadcastForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = document.getElementById('broadcast-message').value;
+    broadcastStatus.textContent = 'Sending...';
+    
+    try {
+      const result = await broadcastMessage(message);
+      if (result.success) {
+        broadcastStatus.textContent = 'Message sent successfully';
+        document.getElementById('broadcast-message').value = '';
+      } else {
+        broadcastStatus.textContent = `Failed: ${result.error || 'Unknown error'}`;
+      }
+    } catch (e) {
+      broadcastStatus.textContent = `Error: ${e.message}`;
+    }
+  });
 
   // Initial refresh
   refresh();
   showPlayerList();
   showClanList();
+  updateServerInfo();
+  updateUptime();
   
   // Set up intervals
   setInterval(refresh, 10000);         // Status every 10s
   setInterval(showPlayerList, 30000);  // Player list every 30s
   setInterval(showClanList, 60000);    // Clan list every 60s
+  setInterval(updateServerInfo, 60000); // Server info every 60s
+  setInterval(updateUptime, 30000);    // Uptime every 30s
 }
 
 // Start everything
