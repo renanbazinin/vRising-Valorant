@@ -25,7 +25,20 @@
       </form>
       <div id="broadcast-status"></div>
     </div>
-  </div>
+
+    <!-- metrics section required by client.js -->
+    <div class="server-stats">
+      <div>Uptime:      <span id="uptime-content">–</span></div>
+      <div>Day:         <span id="day-content">–</span></div>
+      <div>FPS:         <span id="fps-content">–</span></div>
+      <div>World Time:  <span id="worldTime-content">–</span></div>
+      <div>Clan Count:  <span id="clanCount-content">–</span></div>
+    </div>
+    <p>
+      Last update: <span id="last-update">–</span><br>
+      Next fetch:  <span id="next-fetch">–</span>
+    </p>
+    </div>
   <script src="client.js"></script>
 </body>
 </html>
