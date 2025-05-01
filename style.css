@@ -125,6 +125,28 @@ button:active {
   min-height: 1.2em;
 }
 
+/* --- Server Actions (Now Reload Button) --- */
+.server-actions {
+  margin-top: 1.5rem;
+  text-align: center; /* Center the button container */
+}
+.action-item {
+  display: inline-block; /* Allow centering */
+}
+.action-item button {
+}
+
+/* --- Helper Classes --- */
+.loading {
+  font-style: italic;
+  opacity: 0.7;
+  color: #aaa; /* Subtle loading color */
+}
+.error {
+  color: var(--indicator-offline); /* Use existing error color */
+  font-weight: bold;
+}
+
 /* --- mobile responsiveness --- */
 @media (max-width: 480px) {
   .container {
