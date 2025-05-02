@@ -1,11 +1,8 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <link rel="icon" href="V_logo_noir.png" type="image/png">
-
-
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>V Rising Monitor (Vanilla API)</title>
   <link rel="stylesheet" href="style.css"/>
@@ -15,51 +12,226 @@
 
   <!-- Open Graph for link previews -->
   <meta property="og:title" content="V Rising Monitor by aravimBevalorant">
-  <meta property="og:description" content="Experience real‑time V Rising server insights with aravimBevalorant’s cool dashboard: live players, uptime, world time, clan count, and remote controls.">
+  <meta property="og:description" content="Experience real‑time V Rising server insights with aravimBevalorant's cool dashboard: live players, uptime, world time, clan count, and remote controls.">
   <meta property="og:type" content="website">
-
 </head>
 <body>
-  <div class="container">
-    <h1>V Rising Server</h1>
-    <div class="status">
-      <span id="indicator" class="indicator offline"></span>
-      <span id="status-text">Offline</span>
-    </div>
-    <div class="players">
-      Players online: <span id="playerCount">0</span>
-    </div>
-    <div class="broadcast-form">
-      <h2>Broadcast</h2>
-      <form id="broadcast-form">
-        <input id="broadcast-message" placeholder="Message…" required />
-        <button type="submit">Send</button>
-      </form>
-      <div id="broadcast-status"></div>
-    </div>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <div class="header-left">
+        <h1>V Rising Server Dashboard</h1>
+        <div class="status">
+          <span id="indicator" class="indicator offline"></span>
+          <span id="status-text">Offline</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="reload-btn" class="refresh-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+          Refresh
+        </button>
+      </div>
+    </header>
 
-    <!-- metrics section required by client.js -->
-    <div class="server-stats">
-      <div>Uptime:      <span id="uptime-content">–</span></div>
-      <div>Day:         <span id="day-content">–</span></div>
-      <div>FPS:         <span id="fps-content">–</span></div>
-      <div>World Time:  <span id="worldTime-content">–</span></div>
-      <div>Clan Count:  <span id="clanCount-content">–</span></div>
-    </div>
-    <p>
-      Last update: <span id="last-update">–</span><br>
-      Next fetch:  <span id="next-fetch">–</span>
-    </p>
+    <div class="dashboard-grid">
+      <!-- Server Status Card -->
+      <div class="card" id="status-card">
+        <div class="card-header">
+          <h2>Server Status</h2>
+        </div>
+        <div class="card-content">
+          <div class="stat-row">
+            <span class="stat-label">Players:</span>
+            <span class="stat-value"><span id="playerCount">0</span> / <span id="maxPlayers">0</span></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Version:</span>
+            <span class="stat-value" id="version-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Uptime:</span>
+            <span class="stat-value" id="uptime-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Server Type:</span>
+            <span class="stat-value" id="server-type-content">–</span>
+          </div>
+        </div>
+      </div>
 
-    <!-- Reload Button -->
-    <div class="server-actions"> <!-- Keep container for layout consistency -->
-      <div class="action-item">
-        <button id="reload-btn">Reload Now</button>
-        <!-- Removed status span -->
+      <!-- World Info Card -->
+      <div class="card" id="world-card">
+        <div class="card-header">
+          <h2>World</h2>
+        </div>
+        <div class="card-content">
+          <div class="stat-row">
+            <span class="stat-label">Game Day:</span>
+            <span class="stat-value" id="day-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Local Time:</span>
+            <span class="stat-value" id="worldTime-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Days Until Reset:</span>
+            <span class="stat-value" id="reset-days-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Clan Count:</span>
+            <span class="stat-value" id="clanCount-content">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Card -->
+      <div class="card" id="performance-card">
+        <div class="card-header">
+          <h2>Performance</h2>
+        </div>
+        <div class="card-content">
+          <div class="stat-row">
+            <span class="stat-label">FPS:</span>
+            <span class="stat-value" id="fps-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Frame Time:</span>
+            <span class="stat-value" id="frame-time-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Worker Threads:</span>
+            <span class="stat-value" id="worker-threads-content">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Network Card -->
+      <div class="card" id="network-card">
+        <div class="card-header">
+          <h2>Network</h2>
+        </div>
+        <div class="card-content">
+          <div class="stat-row">
+            <span class="stat-label">Net IDs Free:</span>
+            <span class="stat-value" id="net-ids-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Bytes Sent/s:</span>
+            <span class="stat-value" id="bytes-sent-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Bytes Recv/s:</span>
+            <span class="stat-value" id="bytes-recv-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Messages Sent/s:</span>
+            <span class="stat-value" id="msgs-sent-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Packets Recv/s:</span>
+            <span class="stat-value" id="pkts-recv-content">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Card -->
+      <div class="card" id="system-card">
+        <div class="card-header">
+          <h2>System</h2>
+        </div>
+        <div class="card-content">
+          <div class="stat-row">
+            <span class="stat-label">ECS Archetypes:</span>
+            <span class="stat-value" id="ecs-archetypes-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">ECS Active:</span>
+            <span class="stat-value" id="ecs-active-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">AI Paths Success:</span>
+            <span class="stat-value" id="ai-paths-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Active Modifiables:</span>
+            <span class="stat-value" id="modifiables-active-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Total Changes:</span>
+            <span class="stat-value" id="modifiables-changes-content">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logs Card -->
+      <div class="card" id="logs-card">
+        <div class="card-header">
+          <h2>Server Logs</h2>
+        </div>
+        <div class="card-content">
+          <div class="stat-row">
+            <span class="stat-label">Debug:</span>
+            <span class="stat-value" id="logs-debug-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Warning:</span>
+            <span class="stat-value" id="logs-warning-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Error:</span>
+            <span class="stat-value" id="logs-error-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Exceptions:</span>
+            <span class="stat-value" id="logs-exception-content">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Card -->
+      <div class="card" id="ai-card">
+        <div class="card-header">
+          <h2>AI</h2>
+        </div>
+        <div class="card-content">
+          <div class="stat-row">
+            <span class="stat-label">AI Enabled:</span>
+            <span class="stat-value" id="ai-enabled-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Paths Success:</span>
+            <span class="stat-value" id="ai-paths-content">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Paths Failed:</span>
+            <span class="stat-value" id="ai-paths-failed-content">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Broadcast Card -->
+      <div class="card" id="broadcast-card">
+        <div class="card-header">
+          <h2>Broadcast Message</h2>
+        </div>
+        <div class="card-content">
+          <form id="broadcast-form">
+            <input id="broadcast-message" placeholder="Send message to all players..." required />
+            <button type="submit">Send</button>
+          </form>
+          <div id="broadcast-status"></div>
+        </div>
       </div>
     </div>
 
-    </div>
+    <footer>
+      <div class="update-info">
+        <div>Last update: <span id="last-update">–</span></div>
+        <div>Next fetch: <span id="next-fetch">–</span></div>
+      </div>
+    </footer>
+  </div>
+
   <script src="client.js"></script>
 </body>
 </html>
