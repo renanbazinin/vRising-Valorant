@@ -194,7 +194,7 @@ async function loadInfo() {
     // World information
     setElementState('uptime-content', 'success', formatTime(info.world.uptimeSec));
     setElementState('day-content', 'success', info.world.inGameDay);
-    setElementState('worldTime-content', 'success', formatTime(info.world.worldTime));
+    setElementState('worldTime-content', 'success', (info.world.worldTime));
     setElementState('reset-days-content', 'success', info.world.daysUntilReset);
     
     // Performance metrics
